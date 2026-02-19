@@ -15,6 +15,3 @@ pubspec.lock
 # Native libraries
 android/src/main/jniLibs/
 ios/Function.xcframework/
-macos/Function.dylib
-linux/*/libFunction.so
-windows/*/Function.dll

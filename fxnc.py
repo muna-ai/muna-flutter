@@ -41,29 +41,6 @@ def main():
             "url": f"https://cdn.fxn.ai/fxnc/{version}/Function.xcframework.zip",
             "path": Path("ios") / "Function.xcframework.zip"
         },
-        # macOS
-        {
-            "url": f"https://cdn.fxn.ai/fxnc/{version}/Function-macos-arm64.dylib",
-            "path": Path("macos") / "Function.dylib"
-        },
-        # Linux
-        {
-            "url": f"https://cdn.fxn.ai/fxnc/{version}/libFunction-linux-x86_64.so",
-            "path": Path("linux") / "x86_64" / "libFunction.so"
-        },
-        {
-            "url": f"https://cdn.fxn.ai/fxnc/{version}/libFunction-linux-arm64.so",
-            "path": Path("linux") / "arm64" / "libFunction.so"
-        },
-        # Windows
-        {
-            "url": f"https://cdn.fxn.ai/fxnc/{version}/Function-win-x86_64.dll",
-            "path": Path("windows") / "x86_64" / "Function.dll"
-        },
-        {
-            "url": f"https://cdn.fxn.ai/fxnc/{version}/Function-win-arm64.dll",
-            "path": Path("windows") / "arm64" / "Function.dll"
-        },
     ]
     for lib in LIBS:
         _download_fxnc(lib["url"], lib["path"])
