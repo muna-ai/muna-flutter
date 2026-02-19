@@ -23,10 +23,17 @@ flutter:
   plugin:
     platforms:
       android:
+        ffiPlugin: true
+        package: ai.muna.muna
+        pluginClass: MunaPlugin
       ios:
+        ffiPlugin: true
       macos:
+        ffiPlugin: true
       windows:
+        ffiPlugin: true
       linux:
+        ffiPlugin: true
 
 dev_dependencies:
   lints: ^5.1.1
