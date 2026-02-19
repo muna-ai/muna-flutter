@@ -3,7 +3,9 @@
 //  Copyright © 2026 NatML Inc. All Rights Reserved.
 //
 
+import "dart:convert";
 import "dart:io";
+import "package:flutter/services.dart";
 import "../c/configuration.dart" as c;
 import "../c/map.dart" as c;
 import "../c/prediction.dart" as c;
@@ -16,11 +18,14 @@ class PredictionService {
   final MunaClient _client;
   final Map<String, c.Predictor> _cache = {};
   final Directory _cacheDir;
+  final List<_CachedPrediction> _predictionCache;
 
   /// Create a [PredictionService].
   PredictionService(this._client)
-    : _cacheDir = _getCacheDir() {
+    : _cacheDir = _getCacheDir(),
+      _predictionCache = [] {
     _cacheDir.createSync(recursive: true);
+    _loadPredictionCache();
   }
 
   /// Create a prediction.
@@ -128,6 +133,7 @@ class PredictionService {
     required String tag,
     String? clientId,
     String? configurationId,
+    String? predictionId,
   }) async {
     clientId ??= c.Configuration.getClientId();
     configurationId ??= c.Configuration.getUniqueId();
@@ -138,6 +144,7 @@ class PredictionService {
         "tag": tag,
         "clientId": clientId,
         "configurationId": configurationId,
+        if (predictionId != null) "predictionId": predictionId,
       },
       fromJson: Prediction.fromJson,
     );
@@ -154,10 +161,14 @@ class PredictionService {
     if (_cache.containsKey(tag)) {
       return _cache[tag]!;
     }
+    final cachedPrediction = _predictionCache
+        .where((p) => p.tag == tag)
+        .firstOrNull;
     final prediction = await _createRawPrediction(
       tag: tag,
       clientId: clientId,
       configurationId: configurationId,
+      predictionId: cachedPrediction?.id,
     );
     final configuration = c.Configuration();
     try {
@@ -177,6 +188,24 @@ class PredictionService {
     } finally {
       configuration.release();
     }
+  }
+
+  Future<void> _loadPredictionCache() async {
+    try {
+      final json = await rootBundle.loadString("assets/muna.resolved");
+      final data = jsonDecode(json) as Map<String, dynamic>;
+      final predictions = (data["predictions"] as List<dynamic>)
+          .map((e) => _CachedPrediction.fromJson(e as Map<String, dynamic>));
+      String? abi;
+      try {
+        abi = _clientIdToAbi[c.Configuration.getClientId()];
+      } catch (_) {}
+      _predictionCache.addAll(
+        abi != null
+            ? predictions.where((p) => p.clientId == abi)
+            : predictions,
+      );
+    } catch (_) {}
   }
 
   String _getResourcePath(PredictionResource resource) {
@@ -224,4 +253,35 @@ Directory _getCacheDir() {
   } catch (_) {
     return Directory("${Directory.systemTemp.path}/.fxn/cache");
   }
+}
+
+const _clientIdToAbi = {
+  "android-armv7l": "armeabi-v7a",
+  "android-armeabi-v7a": "armeabi-v7a",
+  "android-arm64": "arm64-v8a",
+  "android-arm64-v8a": "arm64-v8a",
+  "android-aarch64": "arm64-v8a",
+  "android-x86": "x86",
+  "android-i386": "x86",
+  "android-i686": "x86",
+  "android-x86_64": "x86_64",
+};
+
+class _CachedPrediction {
+  final String id;
+  final String tag;
+  final String? clientId;
+
+  const _CachedPrediction({
+    required this.id,
+    required this.tag,
+    this.clientId,
+  });
+
+  factory _CachedPrediction.fromJson(Map<String, dynamic> json) =>
+    _CachedPrediction(
+      id: json["id"] as String,
+      tag: json["tag"] as String,
+      clientId: json["clientId"] as String?,
+    );
 }

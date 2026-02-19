@@ -5,6 +5,7 @@
 
 import "dart:typed_data";
 
+import "../../c/value.dart" as c;
 import "../../services/prediction.dart";
 import "../../services/predictor.dart";
 import "../../types/dtype.dart";
@@ -214,12 +215,12 @@ class SpeechService {
           .buffer.asUint8List();
     return (data, contentType);
   }
-  // For other formats, return raw PCM data with the requested content type
-  // The C library's Value.serialize handles the conversion
   final contentType = "audio/${responseFormat.value};rate=$sampleRate";
-  final data = audio.data is Float32List
-    ? (audio.data as Float32List).buffer.asUint8List()
-    : Float32List.fromList(List<double>.from(audio.data))
-        .buffer.asUint8List();
-  return (data, contentType);
+  final audioValue = c.Value.fromObject(audio);
+  try {
+    final data = audioValue.serialize(mime: contentType);
+    return (data, contentType);
+  } finally {
+    audioValue.release();
+  }
 }

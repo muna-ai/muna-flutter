@@ -3,8 +3,8 @@
 //  Copyright © 2026 NatML Inc. All Rights Reserved.
 //
 
-import "../types/dtype.dart";
-import "../types/parameter.dart";
+import "../../types/dtype.dart";
+import "../../types/parameter.dart";
 
 /// Get a parameter with the given data type and denotation.
 ///
