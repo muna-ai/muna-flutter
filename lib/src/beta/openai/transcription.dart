@@ -42,7 +42,7 @@ class TranscriptionService {
     String? language,
     String? prompt,
     double temperature = 0.0,
-    String acceleration = "remote_auto",
+    String acceleration = "local_auto",
   }) async {
     // INCOMPLETE
     throw UnimplementedError("Transcription is not yet implemented");

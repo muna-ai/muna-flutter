@@ -50,7 +50,7 @@ class EmbeddingService {
     required String model,
     int? dimensions,
     String encodingFormat = "float",
-    String acceleration = "remote_auto",
+    String acceleration = "local_auto",
   }) async {
     final inputList = input is String ? [input] : input as List<String>;
     if (!_cache.containsKey(model)) {

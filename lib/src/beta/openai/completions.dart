@@ -64,7 +64,7 @@ class ChatCompletionService {
     double? topP,
     double? frequencyPenalty,
     double? presencePenalty,
-    String acceleration = "remote_auto",
+    String acceleration = "local_auto",
   }) async {
     final outputs = await _predict(
       messages: messages,
@@ -105,7 +105,7 @@ class ChatCompletionService {
     double? topP,
     double? frequencyPenalty,
     double? presencePenalty,
-    String acceleration = "remote_auto",
+    String acceleration = "local_auto",
   }) async {
     final outputs = await _predict(
       messages: messages,

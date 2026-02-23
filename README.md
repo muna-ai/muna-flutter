@@ -8,39 +8,47 @@ Add `muna` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  muna: ^0.0.1
+  muna: ^0.0.2
 ```
 
-## Quickstart
-
+## Making a Prediction
+First, create a Muna client, specifying your access key ([create one here](https://muna.ai/settings/developer)):
 ```dart
 import "package:muna/muna.dart";
 
-// Create the Muna client
-final muna = Muna(accessKey: "your_access_key");
+// 💥 Create an OpenAI client
+final openai = Muna(accessKey: "<ACCESS KEY>").beta.openai;
+```
 
-// Retrieve the current user
-final user = await muna.users.retrieve();
-print(user?.username);
-
-// Retrieve a predictor
-final predictor = await muna.predictors.retrieve("@owner/predictor-tag");
-print(predictor?.name);
-
-// Create a remote prediction
-final prediction = await muna.beta.predictions.create(
-  "@owner/predictor-tag",
-  inputs: { "prompt": "Hello world!" },
+Next, make a prediction:
+```dart
+// 🔥 Make a prediction
+final completion = await openai.chat.completions.create(
+  model: "@openai/gpt-oss-20b",
+  messages: [
+    Message(role: "user", content: "What is the capital of France?"),
+  ],
 );
-print(prediction.results);
+```
 
-// Stream a remote prediction
-await for (final prediction in muna.beta.predictions.stream(
-  "@owner/predictor-tag",
-  inputs: { "prompt": "Hello world!" },
-)) {
-  print(prediction.results);
-}
+Before building and running your app, embed the model into your app by adding a `muna` block to your app's `pubspec.yaml`:
+```yaml
+muna:
+  access_key: "<ACCESS KEY>"
+  predictors:
+    - tag: "@username/model"
+```
+
+Then run the embed command:
+```sh
+# Embed models for your app build (run in Terminal)
+$ dart run muna:embed
+```
+
+Finally, run your app and use the results:
+```dart
+// 🚀 Use the results
+print(completion.choices.first.message.content);
 ```
 
 ___

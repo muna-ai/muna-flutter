@@ -56,7 +56,7 @@ class SpeechService {
     SpeechResponseFormat responseFormat = SpeechResponseFormat.mp3,
     double speed = 1.0,
     SpeechStreamFormat streamFormat = SpeechStreamFormat.audio,
-    String acceleration = "remote_auto",
+    String acceleration = "local_auto",
   }) async {
     if (!_cache.containsKey(model)) {
       _cache[model] = await _createDelegate(model);
