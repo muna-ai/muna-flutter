@@ -11,7 +11,7 @@ dependencies:
   muna: ^0.0.2
 ```
 
-## Making a Prediction
+## Running a Model
 First, create a Muna client, specifying your access key ([create one here](https://muna.ai/settings/developer)):
 ```dart
 import "package:muna/muna.dart";
@@ -20,9 +20,9 @@ import "package:muna/muna.dart";
 final openai = Muna(accessKey: "<ACCESS KEY>").beta.openai;
 ```
 
-Next, make a prediction:
+Next, run a model:
 ```dart
-// 🔥 Make a prediction
+// 🔥 Create a chat completion
 final completion = await openai.chat.completions.create(
   model: "@openai/gpt-oss-20b",
   messages: [
@@ -36,12 +36,12 @@ Before building and running your app, embed the model into your app by adding a 
 muna:
   access_key: "<ACCESS KEY>"
   predictors:
-    - tag: "@username/model"
+    - tag: "@openai/gpt-oss-20b"
 ```
 
-Then run the embed command:
+Then run the embed command in Terminal:
 ```sh
-# Embed models for your app build (run in Terminal)
+# Embed models for your app build
 $ dart run muna:embed
 ```
 
