@@ -1,5 +1,7 @@
 # Muna for Flutter
 
+![Muna logo](https://raw.githubusercontent.com/muna-ai/.github/main/banner.png)
+
 Run AI models in Flutter. Register at [muna.ai](https://muna.ai).
 
 ## Installing Muna
@@ -28,6 +30,7 @@ final completion = await openai.chat.completions.create(
   messages: [
     Message(role: "user", content: "What is the capital of France?"),
   ],
+  acceleration: "local_gpu"
 );
 ```
 
