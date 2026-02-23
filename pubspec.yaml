@@ -1,6 +1,6 @@
 name: muna
 description: Run AI models in Flutter. Register at https://muna.ai.
-version: 0.0.2
+version: 0.0.3
 homepage: https://muna.ai
 repository: https://github.com/muna-ai/muna-flutter
 documentation: https://docs.muna.ai
