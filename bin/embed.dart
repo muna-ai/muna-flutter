@@ -12,6 +12,40 @@ import "package:yaml_edit/yaml_edit.dart";
 const _defaultApiUrl = "https://api.muna.ai/v1";
 const _defaultAbis = ["armeabi-v7a", "arm64-v8a"];
 
+String? _parseAccessKey(List<String> args) {
+  for (var i = 0; i < args.length; i++) {
+    final arg = args[i];
+    if (arg == "--access-key" && i + 1 < args.length) {
+      return args[i + 1];
+    }
+    if (arg.startsWith("--access-key=")) {
+      return arg.substring("--access-key=".length);
+    }
+  }
+  return null;
+}
+
+Map<String, String> _loadEnvFile() {
+  final file = File(".env");
+  if (!file.existsSync()) return {};
+  final result = <String, String>{};
+  for (final line in file.readAsStringSync().split("\n")) {
+    final trimmed = line.trim();
+    if (trimmed.isEmpty || trimmed.startsWith("#")) continue;
+    final eq = trimmed.indexOf("=");
+    if (eq <= 0) continue;
+    final key = trimmed.substring(0, eq).trim();
+    var value = trimmed.substring(eq + 1).trim();
+    if (value.startsWith('"') && value.endsWith('"')) {
+      value = value.substring(1, value.length - 1);
+    } else if (value.startsWith("'") && value.endsWith("'")) {
+      value = value.substring(1, value.length - 1);
+    }
+    result[key] = value;
+  }
+  return result;
+}
+
 Future<void> main(List<String> args) async {
   final pubspecFile = File("pubspec.yaml");
   if (!pubspecFile.existsSync()) {
@@ -24,7 +58,12 @@ Future<void> main(List<String> args) async {
     stderr.writeln('Error: No "muna" block found in pubspec.yaml.');
     exit(1);
   }
-  final accessKey = munaConfig["access_key"] as String? ?? "";
+  final envFile = _loadEnvFile();
+  final accessKey = _parseAccessKey(args)
+      ?? Platform.environment["MUNA_ACCESS_KEY"]
+      ?? envFile["MUNA_ACCESS_KEY"]
+      ?? munaConfig["access_key"] as String?
+      ?? "";
   final apiUrl = munaConfig["api_url"] as String? ?? _defaultApiUrl;
   final predictors = munaConfig["predictors"] as YamlList?;
   if (predictors == null || predictors.isEmpty) {

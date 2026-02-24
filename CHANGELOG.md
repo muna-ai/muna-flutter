@@ -1,5 +1,5 @@
 ## 0.0.3
-*INCOMPLETE*
++ Minor improvements.
 
 ## 0.0.2
 + Updated OpenAI client to default to local inference.

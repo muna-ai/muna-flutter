@@ -40,11 +40,11 @@ class Muna {
     String? apiUrl,
   }) {
     final resolvedAccessKey = accessKey ??
-      Platform.environment["MUNA_ACCESS_KEY"] ??
-      Platform.environment["FXN_ACCESS_KEY"];
+      _env("MUNA_ACCESS_KEY") ??
+      Platform.environment["MUNA_ACCESS_KEY"];
     final resolvedApiUrl = apiUrl ??
-      Platform.environment["MUNA_API_URL"] ??
-      Platform.environment["FXN_API_URL"];
+      _env("MUNA_API_URL") ??
+      Platform.environment["MUNA_API_URL"];
     final client = MunaClient(resolvedAccessKey, resolvedApiUrl);
     return Muna._(client);
   }
@@ -58,4 +58,14 @@ class Muna {
         PredictorService(client),
         PredictionService(client),
       );
+
+  static const _dartDefines = {
+    "MUNA_ACCESS_KEY": String.fromEnvironment("MUNA_ACCESS_KEY"),
+    "MUNA_API_URL": String.fromEnvironment("MUNA_API_URL"),
+  };
+
+  static String? _env(String name) {
+    final value = _dartDefines[name];
+    return (value != null && value.isNotEmpty) ? value : null;
+  }
 }
