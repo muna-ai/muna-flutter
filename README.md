@@ -10,7 +10,7 @@ Add `muna` to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  muna: ^0.0.2
+  muna: ^0.0.3
 ```
 
 ## Running a Model

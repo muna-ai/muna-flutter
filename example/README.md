@@ -1,16 +1,23 @@
-# muna_examples
+# Muna Flutter Example App
 
-A new Flutter project.
+An example Flutter app demonstrating on-device chat completions, text-to-speech, speech-to-text, and more with [Muna](https://muna.ai).
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. **Set up your access key.** Copy the template and add your key from [muna.ai](https://muna.ai/settings/developer):
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your MUNA_ACCESS_KEY
+   ```
 
-A few resources to get you started if this is your first Flutter project:
+2. **Embed the models.** This downloads model resources for Android:
+   ```bash
+   # Run this in Terminal
+   $ dart run muna:embed
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+3. **Run the app** on a connected Android or iOS device:
+   ```bash
+   # Build and run the app
+   $ flutter run --dart-define-from-file=.env
+   ```
