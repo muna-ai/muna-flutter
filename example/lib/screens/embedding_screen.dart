@@ -303,7 +303,7 @@ class _EmbeddingScreenState extends State<EmbeddingScreen>
             Padding(
               padding: const EdgeInsets.only(bottom: 4),
               child: Text(
-                "$_status · drag to rotate",
+                "$_status · drag to rotate · pinch to zoom",
                 style: TextStyle(
                   fontSize: 12,
                   color: colorScheme.onSurfaceVariant,
@@ -447,6 +447,7 @@ class _EmbeddingPainter extends CustomPainter {
   final List<_Point3D> points;
   final double rotY;
   final double rotX;
+  final double zoom;
   final Color gridColor;
   final Color axisColor;
   final Color bgColor;
@@ -457,6 +458,7 @@ class _EmbeddingPainter extends CustomPainter {
     required this.points,
     required this.rotY,
     required this.rotX,
+    this.zoom = 1.0,
     required this.gridColor,
     required this.axisColor,
     required this.bgColor,
@@ -485,7 +487,7 @@ class _EmbeddingPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final cx = size.width / 2;
     final cy = size.height / 2;
-    final scale = math.min(size.width, size.height) * 0.30;
+    final scale = math.min(size.width, size.height) * 0.30 * zoom;
     // --- Background ---
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.width, size.height),
@@ -626,6 +628,7 @@ class _EmbeddingPainter extends CustomPainter {
       points != old.points ||
       rotY != old.rotY ||
       rotX != old.rotX ||
+      zoom != old.zoom ||
       pulseIndex != old.pulseIndex ||
       pulsePhase != old.pulsePhase;
 }
