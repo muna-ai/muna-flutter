@@ -9,8 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  muna:
-    path: ../
+  muna: ^0.0.3
   audioplayers: ^6.1.0
   cupertino_icons: ^1.0.8
 
@@ -22,6 +21,8 @@ dev_dependencies:
 muna:
   predictors:
     - tag: "@kitten-ml/kitten-tts-mini-0.8"
+    - tag: "@openai/gpt-oss-20b"
+    - tag: "@google/embedding-gemma"
 
 flutter:
   assets:

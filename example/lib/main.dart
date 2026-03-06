@@ -1,4 +1,6 @@
 import "package:flutter/material.dart";
+import "screens/chat_screen.dart";
+import "screens/embedding_screen.dart";
 import "screens/text_to_speech_screen.dart";
 
 void main() {
@@ -21,6 +23,16 @@ final _examples = [
     title: "Text to Speech",
     icon: Icons.record_voice_over,
     builder: () => const TextToSpeechScreen(),
+  ),
+  _Example(
+    title: "Chat",
+    icon: Icons.chat,
+    builder: () => const ChatScreen(),
+  ),
+  _Example(
+    title: "Embedding Space",
+    icon: Icons.scatter_plot,
+    builder: () => const EmbeddingScreen(),
   ),
 ];
 
