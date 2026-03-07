@@ -2,7 +2,7 @@ import "dart:math";
 import "dart:typed_data";
 import "package:flutter/material.dart";
 import "package:muna/muna.dart";
-import "package:record/record.dart";
+import "package:record/record.dart" as rec;
 
 class SpeechToTextScreen extends StatefulWidget {
   const SpeechToTextScreen({super.key});
@@ -19,7 +19,7 @@ class _TranscriptionEntry {
 
 class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   late final Muna _muna;
-  final _recorder = AudioRecorder();
+  final _recorder = rec.AudioRecorder();
   bool _recording = false;
   bool _transcribing = false;
   String? _error;
@@ -41,32 +41,38 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
   }
 
   Future<void> _startRecording() async {
-    final granted = await _recorder.hasPermission();
-    if (!granted) {
-      setState(() => _error = "Microphone permission denied");
-      return;
-    }
-    setState(() {
-      _error = null;
-      _pcmSamples.clear();
-    });
-    final stream = await _recorder.startStream(
-      const RecordConfig(
-        encoder: AudioEncoder.pcm16bits,
-        numChannels: 1,
-        sampleRate: _sampleRate,
-      ),
-    );
-    _recordingStart = DateTime.now();
-    setState(() => _recording = true);
-    stream.listen((data) {
-      // PCM16 little-endian bytes → signed 16-bit samples
-      final bytes = data is Uint8List ? data : Uint8List.fromList(data);
-      for (var i = 0; i + 1 < bytes.length; i += 2) {
-        final sample = bytes[i] | (bytes[i + 1] << 8);
-        _pcmSamples.add(sample > 32767 ? sample - 65536 : sample);
+    try {
+      final granted = await _recorder.hasPermission();
+      if (!granted) {
+        setState(() => _error = "Microphone permission denied");
+        return;
       }
-    });
+      setState(() {
+        _error = null;
+        _pcmSamples.clear();
+      });
+      final stream = await _recorder.startStream(
+        const rec.RecordConfig(
+          encoder: rec.AudioEncoder.pcm16bits,
+          numChannels: 1,
+          sampleRate: _sampleRate,
+        ),
+      );
+      _recordingStart = DateTime.now();
+      setState(() => _recording = true);
+      stream.listen(
+        (data) {
+          final bytes = data is Uint8List ? data : Uint8List.fromList(data);
+          for (var i = 0; i + 1 < bytes.length; i += 2) {
+            final sample = bytes[i] | (bytes[i + 1] << 8);
+            _pcmSamples.add(sample > 32767 ? sample - 65536 : sample);
+          }
+        },
+        onError: (e) => setState(() => _error = "Recording error: $e"),
+      );
+    } catch (e) {
+      setState(() => _error = "Failed to start recording: $e");
+    }
   }
 
   Future<void> _stopAndTranscribe() async {
