@@ -594,7 +594,7 @@ class _EmbeddingPainter extends CustomPainter {
           text: label,
           style: TextStyle(
             color: color,
-            fontSize: 9 * depthFactor,
+            fontSize: 13 * depthFactor,
             fontWeight: pt.isUser ? FontWeight.bold : FontWeight.normal,
           ),
         ),
