@@ -54,8 +54,8 @@ class _ChatScreenState extends State<ChatScreen> {
     try {
       final chunks = await _muna.beta.openai.chat.completions.stream(
         messages: _messages,
-        model: "@openai/gpt-oss-20b",
-        acceleration: "remote_auto",
+        model: "@anon/smollm_2_135m",
+        acceleration: "local_auto",
       );
       final content = chunks
           .expand((c) => c.choices)

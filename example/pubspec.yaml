@@ -22,7 +22,7 @@ dev_dependencies:
 muna:
   predictors:
     - tag: "@kitten-ml/kitten-tts-mini-0.8"
-    - tag: "@openai/gpt-oss-20b"
+    - tag: "@anon/smollm_2_135m"
     - tag: "@google/embedding-gemma"
     - tag: "@moonshine/moonshine-base"
 
