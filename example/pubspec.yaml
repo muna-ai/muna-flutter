@@ -22,6 +22,7 @@ dev_dependencies:
 muna:
   predictors:
     - tag: "@kitten-ml/kitten-tts-mini-0.8"
+    - tag: "@anon/pocket_tts"
     - tag: "@anon/smollm_2_135m"
     - tag: "@google/embedding-gemma"
     - tag: "@moonshine/moonshine-base"

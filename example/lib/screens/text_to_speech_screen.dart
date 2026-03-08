@@ -11,6 +11,37 @@ class TextToSpeechScreen extends StatefulWidget {
   State<TextToSpeechScreen> createState() => _TextToSpeechScreenState();
 }
 
+class _TTSModel {
+  final String tag;
+  final String label;
+  final String defaultVoice;
+  final List<String> voices;
+  const _TTSModel({
+    required this.tag,
+    required this.label,
+    required this.defaultVoice,
+    required this.voices,
+  });
+}
+
+const _models = [
+  _TTSModel(
+    tag: "@kitten-ml/kitten-tts-mini-0.8",
+    label: "Kitten TTS Mini",
+    defaultVoice: "Bella",
+    voices: ["Bella", "Sarah", "Nicole"],
+  ),
+  _TTSModel(
+    tag: "@anon/pocket_tts",
+    label: "Pocket TTS",
+    defaultVoice: "cosette",
+    voices: [
+      "alba", "azelma", "cosette", "eponine",
+      "fantine", "marius", "javert", "jean",
+    ],
+  ),
+];
+
 class _TextToSpeechScreenState extends State<TextToSpeechScreen> {
   final _textController = TextEditingController();
   final _audioPlayer = AudioPlayer();
@@ -18,6 +49,8 @@ class _TextToSpeechScreenState extends State<TextToSpeechScreen> {
   bool _loading = false;
   bool _playing = false;
   String _status = "";
+  _TTSModel _selectedModel = _models[0];
+  late String _selectedVoice = _selectedModel.defaultVoice;
 
   @override
   void initState() {
@@ -48,8 +81,8 @@ class _TextToSpeechScreenState extends State<TextToSpeechScreen> {
     try {
       final response = await _muna.beta.openai.audio.speech.create(
         input: text,
-        model: "@kitten-ml/kitten-tts-mini-0.8",
-        voice: "Bella",
+        model: _selectedModel.tag,
+        voice: _selectedVoice,
         acceleration: "local_auto",
       );
       final bytes = Uint8List.fromList(response.content);
@@ -69,7 +102,7 @@ class _TextToSpeechScreenState extends State<TextToSpeechScreen> {
         title: const Text("Text to Speech"),
         centerTitle: true,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -87,7 +120,65 @@ class _TextToSpeechScreenState extends State<TextToSpeechScreen> {
                 filled: true,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
+            DropdownButtonFormField<_TTSModel>(
+              value: _selectedModel,
+              isExpanded: true,
+              decoration: InputDecoration(
+                labelText: "Model",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
+                isDense: true,
+              ),
+              items: _models
+                  .map((m) => DropdownMenuItem(
+                        value: m,
+                        child: Text(m.label, overflow: TextOverflow.ellipsis),
+                      ))
+                  .toList(),
+              onChanged: _loading
+                  ? null
+                  : (m) {
+                      if (m == null) return;
+                      setState(() {
+                        _selectedModel = m;
+                        _selectedVoice = m.defaultVoice;
+                      });
+                    },
+            ),
+            const SizedBox(height: 12),
+            DropdownButtonFormField<String>(
+              value: _selectedVoice,
+              isExpanded: true,
+              decoration: InputDecoration(
+                labelText: "Voice",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
+                isDense: true,
+              ),
+              items: _selectedModel.voices
+                  .map((v) => DropdownMenuItem(
+                        value: v,
+                        child: Text(v, overflow: TextOverflow.ellipsis),
+                      ))
+                  .toList(),
+              onChanged: _loading
+                  ? null
+                  : (v) {
+                      if (v != null) setState(() => _selectedVoice = v);
+                    },
+            ),
+            const SizedBox(height: 16),
             FilledButton.icon(
               onPressed: _loading ? null : _onGenerateSpeech,
               icon: _loading
