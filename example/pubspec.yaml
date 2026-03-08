@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  muna: ^0.0.3
+  muna:
+    path: ../
   audioplayers: ^6.1.0
   record: ^6.2.0
   cupertino_icons: ^1.0.8

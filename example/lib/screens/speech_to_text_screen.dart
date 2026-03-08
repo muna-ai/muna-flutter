@@ -91,17 +91,11 @@ class _SpeechToTextScreenState extends State<SpeechToTextScreen> {
       for (var i = 0; i < _pcmSamples.length; i++) {
         float32[i] = _pcmSamples[i] / 32768.0;
       }
-      final prediction = await _muna.predictions.create(
-        "@moonshine/moonshine-base",
-        inputs: {
-          "audio": Tensor(float32, [_pcmSamples.length, 1]),
-        },
+      final transcription = await _muna.beta.openai.audio.transcriptions.create(
+        audio: Tensor(float32, [_pcmSamples.length, 1]),
+        model: "@moonshine/moonshine-base",
       );
-      if (prediction.error != null) {
-        setState(() => _error = prediction.error);
-        return;
-      }
-      final text = prediction.results?[0] as String? ?? "";
+      final text = transcription.text;
       setState(() {
         _transcriptions.insert(
           0,
