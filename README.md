@@ -60,6 +60,8 @@ ___
 | Text to Speech | Speech to Text |
 |:-:|:-:|
 | ![Text to Speech](doc/gif/muna_flutter_tts.gif) | ![Speech to Text](doc/gif/muna_flutter_stt.gif) |
+| **Chat** | **Embedding Space** |
+| ![Chat](doc/gif/muna_flutter_chat.gif) | ![Embedding Space](doc/gif/muna_flutter_embed.gif) |
 
 ___
 
