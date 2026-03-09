@@ -58,6 +58,7 @@ ___
 
 ## Example Screenshots
 ![Text to Speech](doc/gif/muna_flutter_tts.gif)
+![Speech to Text](doc/gif/muna_flutter_stt.gif)
 
 ___
 
