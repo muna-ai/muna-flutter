@@ -12,6 +12,7 @@ dependencies:
   muna:
     path: ../
   audioplayers: ^6.1.0
+  record: ^6.2.0
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
@@ -22,6 +23,10 @@ dev_dependencies:
 muna:
   predictors:
     - tag: "@kitten-ml/kitten-tts-mini-0.8"
+    - tag: "@anon/pocket_tts"
+    - tag: "@anon/smollm_2_135m"
+    - tag: "@google/embedding-gemma"
+    - tag: "@moonshine/moonshine-base"
 
 flutter:
   assets:

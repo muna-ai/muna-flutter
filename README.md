@@ -56,6 +56,15 @@ print(completion.choices.first.message.content);
 
 ___
 
+## Example Screenshots
+| Text to Speech | Speech to Text |
+|:-:|:-:|
+| ![Text to Speech](doc/gif/muna_flutter_tts.gif) | ![Speech to Text](doc/gif/muna_flutter_stt.gif) |
+| **Chat** | **Embedding Space** |
+| ![Chat](doc/gif/muna_flutter_chat.gif) | ![Embedding Space](doc/gif/muna_flutter_embed.gif) |
+
+___
+
 ## Useful Links
 - [Check out several AI models we've compiled](https://github.com/muna-ai/muna-predictors).
 - [Join our Slack community](https://muna.ai/slack).
