@@ -57,8 +57,9 @@ print(completion.choices.first.message.content);
 ___
 
 ## Example Screenshots
-![Text to Speech](doc/gif/muna_flutter_tts.gif)
-![Speech to Text](doc/gif/muna_flutter_stt.gif)
+| Text to Speech | Speech to Text |
+|:-:|:-:|
+| ![Text to Speech](doc/gif/muna_flutter_tts.gif) | ![Speech to Text](doc/gif/muna_flutter_stt.gif) |
 
 ___
 
